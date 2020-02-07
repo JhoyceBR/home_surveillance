@@ -54,7 +54,7 @@ class Image:
             bgr = cv2.imread(self.path)
         except:
             bgr = None
-        return bgr
+        return (bgr)
 
     def getRGB(self):
         """
@@ -68,11 +68,11 @@ class Image:
             rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
         else:
             rgb = None
-        return rgb
+        return (rgb)
 
     def __repr__(self):
         """String representation for printing."""
-        return "({}, {})".format(self.cls, self.name)
+        return ("({}, {})".format(self.cls, self.name))
 
 
 def iterImgs(directory):

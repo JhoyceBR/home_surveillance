@@ -90,7 +90,7 @@ except TypeError:
     try:
         os.makedirs('logs')
     except OSError as exc:  # Python >2.5
-        print "logging directory already exist"
+        print ("logging directory already exist")
 
 logger = logging.getLogger()
 formatter = logging.Formatter("(%(threadName)-10s) %(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -718,13 +718,13 @@ class SurveillanceSystem(object):
                             logger.info( "alertTest2" + alert.camera)
                             cv2.imwrite("notification/image.png", self.cameras[int(alert.camera)].processing_frame)#
                             self.take_action(alert)
-                            return True
+                            return (True)
                         elif person.confidence >= alert.confidence:
                             logger.info( "alertTest3" + alert.camera)
                             cv2.imwrite("notification/image.png", self.cameras[int(alert.camera)].processing_frame)#
                             self.take_action(alert)
-                            return True     
-                return False # Person has not been detected check next alert       
+                            return (True)
+                return (False) # Person has not been detected check next alert       
 
             else:
                 logger.info( "alertTest4" + alert.camera)
@@ -732,9 +732,9 @@ class SurveillanceSystem(object):
                        logger.info( "alertTest5" + alert.camera)
                        cv2.imwrite("notification/image.png", self.cameras[int(alert.camera)].processing_frame)#
                        self.take_action(alert)
-                       return True
+                       return (True)
                 else:
-                  return False # Motion was not detected check next alert
+                  return (False) # Motion was not detected check next alert
         else:
             if alert.event == 'Recognition': # Check events
                 with self.camerasLock :
@@ -745,13 +745,13 @@ class SurveillanceSystem(object):
                             if alert.person == "unknown" and (100 - person.confidence) >= alert.confidence:
                                 cv2.imwrite("notification/image.png", camera.processing_frame)#
                                 self.take_action(alert)
-                                return True
+                                return (True)
                             elif person.confidence >= alert.confidence:
                                 cv2.imwrite("notification/image.png", camera.processing_frame)#
                                 self.take_action(alert)
-                                return True
+                                return (True)
                
-                return False # Person has not been detected check next alert   
+                return (False) # Person has not been detected check next alert   
 
             else:
                 with  self.camerasLock :
@@ -759,9 +759,9 @@ class SurveillanceSystem(object):
                         if camera.motion == True: # Has motion been detected
                             cv2.imwrite("notification/image.png", camera.processing_frame)#
                             self.take_action(alert)
-                            return True
+                            return (True)
 
-                return False # Motion was not detected check next camera
+                return (False) # Motion was not detected check next camera
 
    def take_action(self,alert): 
         """Sends email alert and/or triggers the alarm"""
@@ -825,7 +825,7 @@ class SurveillanceSystem(object):
           os.makedirs(path+name)
         except OSError:
           logger.info( OSError)
-          return False
+          return (False)
           pass
       else:
          num = len([nam for nam in os.listdir(path +name) if os.path.isfile(os.path.join(path+name, nam))])
@@ -834,7 +834,7 @@ class SurveillanceSystem(object):
       cv2.imwrite(path+name+"/"+ name + "_"+str(num) + ".png", image)
       self.get_face_database_names()
 
-      return True
+      return (True)
 
 
    def get_face_database_names(self):
@@ -953,7 +953,7 @@ class Tracker:
         
     def overlap(self, bb):
         p = float(self.bb.intersect(bb).area()) / float(self.bb.area())
-        return p > 0.2
+        return (p > 0.2)
 
     def ping(self):
         self.pings += 1

@@ -73,18 +73,18 @@ class MotionDetector(object):
                 self.currentFrame = gray
                 self.history +=1
                 if get_rects == True: # Return peoplerects without frame
-                    return occupied,  self.peopleRects 
+                    return (occupied,  self.peopleRects )
                 else:
-                    return occupied,  frame
+                    return (occupied,  frame)
             elif self.history == 4:
                 self.previousFrame = self.currentFrame
                 self.currentFrame = gray      
                 self.meanFrame = cv2.addWeighted(self.previousFrame,0.5,self.currentFrame,0.5,0)
                 self.history +=1
                 if get_rects == True: # Return peoplerects without frame
-                    return occupied,  self.peopleRects 
+                    return (occupied,  self.peopleRects)
                 else:
-                    return occupied,  frame
+                    return (occupied,  frame)
             elif self.history == 5:
                 self.previousFrame = self.meanFrame
                 self.currentFrame = gray
@@ -92,9 +92,9 @@ class MotionDetector(object):
                 # cv2.imwrite("avegrayfiltered.jpg", self.meanFrame)
                 self.history +=1
                 if get_rects == True: # Return peoplerects without frame
-                    return occupied,  self.peopleRects 
+                    return (occupied,  self.peopleRects)
                 else:
-                    return occupied,  frame
+                    return (occupied,  frame)
             elif self.history > 4000 and len(self.peopleRects) == 0: # Recalculate background model every 4000 frames only if there are no people in frame 
                 self.previousFrame = self.currentFrame
                 self.currentFrame = gray
@@ -133,6 +133,6 @@ class MotionDetector(object):
             logger.debug('////////////////////// Contour area done //////////////////////')
             self.history +=1
             if get_rects == True: # Return peoplerects without frame
-                return occupied,  self.peopleRects 
+                return (occupied,  self.peopleRects)
             else:
-                return occupied,  frame
+                return (occupied,  frame)

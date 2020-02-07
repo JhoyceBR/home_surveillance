@@ -114,7 +114,7 @@ stdout: {}
         try:
             rep = [float(x) for x in output.strip().split(',')]
             rep = np.array(rep)
-            return rep
+            return (rep)
         except Exception as e:
             self.p.kill()
             stdout, stderr = self.p.communicate()
@@ -152,4 +152,4 @@ stdout: {}
         cv2.imwrite(t, bgrImg)
         rep = self.forwardPath(t)
         os.remove(t)
-        return rep
+        return (rep)

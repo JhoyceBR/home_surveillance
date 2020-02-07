@@ -101,12 +101,12 @@ class FaceRecogniser(object):
         landmarks = self.align.findLandmarks(rgbFrame, bb)
         if landmarks == None:
             logger.info("///  FACE LANDMARKS COULD NOT BE FOUND  ///")
-            return None
+            return (None)
         alignedFace = self.align.align(args.imgDim, rgbFrame, bb,landmarks=landmarks,landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
 
         if alignedFace is None:
             logger.info("///  FACE COULD NOT BE ALIGNED  ///")
-            return None
+            return (None)
 
         logger.info("////  FACE ALIGNED  // ")
         with self.neuralNetLock :
@@ -114,14 +114,14 @@ class FaceRecogniser(object):
 
         if persondict is None:
             logger.info("/////  FACE COULD NOT BE RECOGNIZED  //")
-            return persondict, alignedFace
+            return (persondict, alignedFace)
         else:
             logger.info("/////  FACE RECOGNIZED  /// ")
-            return persondict, alignedFace
+            return (persondict, alignedFace)
 
     def recognize_face(self,img):
         if self.getRep(img) is None:
-            return None
+            return (None)
         rep1 = self.getRep(img) # Gets embedding representation of image
         logger.info("Embedding returned. Reshaping the image and flatting it out in a 1 dimension array.")
         rep = rep1.reshape(1, -1)   #take the image and  reshape the image array to a single line instead of 2 dimensionals
@@ -137,26 +137,26 @@ class FaceRecogniser(object):
         logger.info("Recognized {} with {:.2f} confidence.".format(person1, confidence1))
 
         persondict = {'name': person1, 'confidence': confidence1, 'rep':rep1}
-        return persondict
+        return (persondict)
 
     def getRep(self,alignedFace):
         bgrImg = alignedFace
         if bgrImg is None:
             logger.error("unable to load image")
-            return None
+            return (None)
 
         logger.info("Tweaking the face color ")
         alignedFace = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
         start = time.time()
         logger.info("Getting embedding for the face")
         rep = self.net.forward(alignedFace) # Gets embedding - 128 measurements
-        return rep
+        return (rep)
 
     def reloadClassifier(self):
         with open("generated-embeddings/classifier.pkl", 'r') as f: # Reloads character stream from pickle file
             (self.le, self.clf) = pickle.load(f) # Loads labels and classifier SVM or GMM
         logger.info("reloadClassifier called")
-        return True
+        return (True)
 
     def trainClassifier(self):
         """Trainng the classifier begins by aligning any images in the
@@ -209,10 +209,10 @@ class FaceRecogniser(object):
             if self.p.poll() is None:
                 logger.info("<=Something went Wrong===>")
                 self.p.kill()
-                return False
+                return (False)
         atexit.register(exitHandler)
 
-        return True
+        return (True)
 
 
     def train(self,workDir,classifier,ldaDim):

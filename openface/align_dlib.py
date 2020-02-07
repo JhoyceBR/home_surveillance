@@ -105,7 +105,7 @@ class AlignDlib:
         except Exception as e:
             print("Warning: {}".format(e))
             # In rare cases, exceptions are thrown.
-            return []
+            return ([])
 
     def getLargestFaceBoundingBox(self, rgbImg, skipMulti=False):
         """
@@ -122,9 +122,9 @@ class AlignDlib:
 
         faces = self.getAllFaceBoundingBoxes(rgbImg)
         if (not skipMulti and len(faces) > 0) or len(faces) == 1:
-            return max(faces, key=lambda rect: rect.width() * rect.height())
+            return (max(faces, key=lambda rect: rect.width() * rect.height()))
         else:
-            return None
+            return (None)
 
     def findLandmarks(self, rgbImg, bb):
         """
@@ -141,7 +141,7 @@ class AlignDlib:
         assert bb is not None
 
         points = self.predictor(rgbImg, bb)
-        return list(map(lambda p: (p.x, p.y), points.parts()))
+        return (list(map(lambda p: (p.x, p.y), points.parts())))
 
     def align(self, imgDim, rgbImg, bb=None,
               landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
@@ -179,7 +179,7 @@ class AlignDlib:
         if landmarks is None:
             landmarks = self.findLandmarks(rgbImg, bb)
             if landmarks is None:
-                return None
+                return (None)
                 
         npLandmarks = np.float32(landmarks)
         npLandmarkIndices = np.array(landmarkIndices)
@@ -188,4 +188,4 @@ class AlignDlib:
                                    imgDim * MINMAX_TEMPLATE[npLandmarkIndices])
         thumbnail = cv2.warpAffine(rgbImg, H, (imgDim, imgDim))
 
-        return thumbnail
+        return (thumbnail)

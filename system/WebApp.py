@@ -61,15 +61,15 @@ def login():
             error = 'Invalid username or password. Please try again'
         else:
             session['user'] = request.form['username']
-            return redirect(url_for('home'))
+            return (redirect(url_for('home')))
 
-    return render_template('login.html', error = error)
+    return (render_template('login.html', error = error))
 
 @app.route('/home')
 def home():
     if g.user:
-        return render_template('index.html')
-    return redirect(url_for('login'))
+        return (render_template('index.html'))
+    return (redirect(url_for('login')))
 
 @app.before_request
 def before_request():
@@ -91,11 +91,11 @@ def upload():
         except:
              message = "file upload unsuccessfull"
 
-        return render_template('index.html', message = message)
+        return (render_template('index.html', message = message))
     if g.user:
-        return render_template('index.html')
+        return (render_template('index.html'))
     else:
-        return redirect(url_for('login'))
+        return (redirect(url_for('login')))
 
 def gen(camera):
     """Can read processed frame or unprocessed frame.
@@ -112,8 +112,8 @@ def gen(camera):
 @app.route('/video_streamer/<camNum>')
 def video_streamer(camNum):
     """Used to stream frames to client, camNum represents the camera index in the cameras array"""
-    return Response(gen(HomeSurveillance.cameras[int(camNum)]),
-                    mimetype='multipart/x-mixed-replace; boundary=frame') # A stream where each part replaces the previous part the multipart/x-mixed-replace content type must be used.
+    return (Response(gen(HomeSurveillance.cameras[int(camNum)]),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')) # A stream where each part replaces the previous part the multipart/x-mixed-replace content type must be used.
 
 def system_monitoring():
     """Pushes system monitoring data to client"""
@@ -134,13 +134,13 @@ def cpu_usage():
       cpu_load = psutil.cpu_percent(interval=1, percpu=False)
       #print "CPU Load: " + str(cpu_load)
       app.logger.info("CPU Load: " + str(cpu_load))
-      return cpu_load  
+      return (cpu_load)
 
 def memory_usage():
      mem_usage = psutil.virtual_memory().percent
      #print "System Memory Usage: " + str( mem_usage)
      app.logger.info("System Memory Usage: " + str( mem_usage))
-     return mem_usage 
+     return (mem_usage)
 
 @app.route('/add_camera', methods = ['GET','POST'])
 def add_camera():
@@ -156,8 +156,8 @@ def add_camera():
         app.logger.info("Addding a new camera with url: ")
         app.logger.info(camURL)
         app.logger.info(fpsTweak)
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/remove_camera', methods = ['GET','POST'])
 def remove_camera():
@@ -170,8 +170,8 @@ def remove_camera():
             HomeSurveillance.remove_camera(camID)
         app.logger.info("Removing camera number : " + data)
         data = {"alert_status": "removed"}
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/create_alert', methods = ['GET','POST'])
 def create_alert():
@@ -195,8 +195,8 @@ def create_alert():
             HomeSurveillance.alerts.append(SurveillanceSystem.Alert(alarmstate,camera, event, person, actions, emailAddress, int(confidence))) 
         HomeSurveillance.alerts[-1].id 
         data = {"alert_id": HomeSurveillance.alerts[-1].id, "alert_message": "Alert if " + HomeSurveillance.alerts[-1].alertString}
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/remove_alert', methods = ['GET','POST'])
 def remove_alert():
@@ -209,8 +209,8 @@ def remove_alert():
                     break
            
         data = {"alert_status": "removed"}
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/remove_face', methods = ['GET','POST'])
 def remove_face():
@@ -227,8 +227,8 @@ def remove_face():
                 pass
 
         data = {"face_removed":  'true'}
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/add_face', methods = ['GET','POST'])
 def add_face():
@@ -258,8 +258,8 @@ def add_face():
         socketio.emit('system_data', json.dumps(systemData) ,namespace='/surveillance')
            
         data = {"face_added":  wriitenToDir}
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/retrain_classifier', methods = ['GET','POST'])
 def retrain_classifier():
@@ -270,8 +270,8 @@ def retrain_classifier():
         HomeSurveillance.trainingEvent.set() # Release processing threads       
         data = {"finished":  retrained}
         app.logger.info("Finished re-training")
-        return jsonify(data)
-    return render_template('index.html')
+        return (jsonify(data))
+    return (render_template('index.html'))
 
 @app.route('/get_faceimg/<name>')
 def get_faceimg(name):  
@@ -284,10 +284,10 @@ def get_faceimg(name):
         img = ""
 
     if img == "":
-        return "http://www.character-education.org.uk/images/exec/speaker-placeholder.png"            
-    return  Response((b'--frame\r\n'
+        return ("http://www.character-education.org.uk/images/exec/speaker-placeholder.png")
+    return  (Response((b'--frame\r\n'
                      b'Content-Type: image/jpeg\r\n\r\n' + img + b'\r\n\r\n'),
-                    mimetype='multipart/x-mixed-replace; boundary=frame') 
+                    mimetype='multipart/x-mixed-replace; boundary=frame'))
 
 
 @app.route('/get_all_faceimgs/<name>')
@@ -301,10 +301,10 @@ def get_faceimgs(name):
         img = ""
 
     if img == "":
-        return "http://www.character-education.org.uk/images/exec/speaker-placeholder.png"            
-    return  Response((b'--frame\r\n'
+        return ("http://www.character-education.org.uk/images/exec/speaker-placeholder.png")
+    return  (Response((b'--frame\r\n'
                      b'Content-Type: image/jpeg\r\n\r\n' + img + b'\r\n\r\n'),
-                    mimetype='multipart/x-mixed-replace; boundary=frame') 
+                    mimetype='multipart/x-mixed-replace; boundary=frame'))
 
 def update_faces():
     """Used to push all detected faces to client"""

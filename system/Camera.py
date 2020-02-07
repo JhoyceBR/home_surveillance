@@ -139,12 +139,12 @@ class IPCamera(object):
 		frame = self.captureFrame 	
 		frame = ImageUtils.resize_mjpeg(frame)
 		ret, jpeg = cv2.imencode('.jpg', frame)
-		return jpeg.tostring()
+		return (jpeg.tostring())
 
 	def read_frame(self):
 		capture_blocker = self.captureEvent.wait()  
 		frame = self.captureFrame 	
-		return frame
+		return (frame)
 
 	def read_processed(self):
 		frame = None
@@ -156,7 +156,7 @@ class IPCamera(object):
 
 		frame = ImageUtils.resize_mjpeg(frame)
 		ret, jpeg = cv2.imencode('.jpg', frame)
-		return jpeg.tostring()
+		return (jpeg.tostring())
 
 	def dump_video_info(self):
 		logger.info("---------Dumping video feed info---------------------")

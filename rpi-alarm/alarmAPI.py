@@ -59,9 +59,9 @@ def main():
 	    if password == 'admin':		   
 		    alarm_state['state'] = GPIO.input(13)
 		    alarm_state['triggered'] = triggered
-		    return jsonify(alarm_state)
+		    return (jsonify(alarm_state))
 	    else:
-		    return 'Access Denied'
+		    return ('Access Denied')
 		   
 @app.route("/change_state", methods = ['GET','POST'])
 def change_state():
@@ -76,9 +76,9 @@ def change_state():
 			    triggered = False			 	
 		    alarm_state['state'] = GPIO.input(13)
 		    alarm_state['triggered'] = triggered
-		    return jsonify(alarm_state)
+		    return (jsonify(alarm_state))
 	    else:
-		    return 'Access Denied'
+		    return ('Access Denied')
 		   
 @app.route("/trigger", methods = ['GET','POST'])
 def trigger():
@@ -97,9 +97,9 @@ def trigger():
 		   alarm_state['state'] = GPIO.input(13)
 		   alarm_state['triggered'] = triggered
 		   
-		   return jsonify(alarm_state)
+		   return (jsonify(alarm_state))
 	   else:
-		   return 'Access Denied'
+		   return ('Access Denied')
 
 def alarmtrigger():
 	global triggered

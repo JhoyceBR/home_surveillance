@@ -44,9 +44,9 @@ class FaceDetector(object):
 
     def detect_faces(self,image,dlibDetector):
          if dlibDetector:
-            return self.detect_dlib_face(image)
+            return (self.detect_dlib_face(image))
          else:
-            return self.detect_cascade_face(image)
+            return (self.detect_cascade_face(image))
 
     def pre_processing(self,image):
          """Performs CLAHE on a greyscale image"""
@@ -54,7 +54,7 @@ class FaceDetector(object):
          clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
          cl1 = clahe.apply(grey)
          # cv2.imwrite('clahe_2.jpg',cl1)
-         return cl1
+         return (cl1)
 
 
     def rgb_pre_processing(self,image):
@@ -71,7 +71,7 @@ class FaceDetector(object):
         filtered = cv2.merge([B, G, R])
         cv2.imwrite('notfilteredRGB.jpg',image)
         cv2.imwrite('filteredRGB.jpg',filtered)
-        return filtered
+        return (filtered)
 
 
     def detect_dlib_face(self,image):
@@ -89,17 +89,17 @@ class FaceDetector(object):
         #     else:
         #         print "notappended: " + str(scores[i])
 
-        return bbs  
+        return (bbs)
 
     def detect_cascade_face(self,image):
        
         with self.cascade_lock:  # Used to block simultaneous access to resource, stops segmentation fault when using more than one camera
             image = self.pre_processing(image)
             rects = self.facecascade.detectMultiScale(image, scaleFactor=1.25, minNeighbors=3, minSize=(20, 20), flags = cv2.CASCADE_SCALE_IMAGE)
-        return rects
+        return (rects)
 
     def detect_cascadeface_accurate(self,img):
         """Used to help mitigate false positive detections"""
         with self.accurate_cascade_lock:
             rects = self.facecascade2.detectMultiScale(img, scaleFactor=1.02, minNeighbors=12, minSize=(20, 20), flags = cv2.CASCADE_SCALE_IMAGE)
-        return rects
+        return (rects)
